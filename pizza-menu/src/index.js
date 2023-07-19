@@ -58,15 +58,9 @@ function App() {
 }
 
 function Header() {
-	// const style = {
-	// 	color: "lightblue",
-	// 	fontSize: "48px",
-	// 	textTransform: "uppercase",
-	// };
-	const style = {};
 	return (
 		<header className="header">
-			<h1 style={style}>Fast React Pizza Co.</h1>
+			<h1>Fast React Pizza Co.</h1>
 		</header>
 	);
 }
@@ -78,39 +72,35 @@ function Menu() {
 			<h2>Our menu</h2>
 
 			{pizzas.length > 1 ? (
-				<ul className="pizzas">
-					{pizzaData.map((pizza) => (
-						<Pizza pizzaObj={pizza} key={pizza.name} />
-					))}
-				</ul>
+				// React fragment that lets us return two elements
+				<>
+					<p>
+						Authentic Italian cuisine. {pizzas.length} creative
+						dishes to choose from. All from out stone oven, all
+						organic, all delicious.
+					</p>
+					<ul className="pizzas">
+						{pizzaData.map((pizza) => (
+							<Pizza pizzaObj={pizza} key={pizza.name} />
+						))}
+					</ul>
+				</>
 			) : (
 				<p>We're still working on menu. Please come back later!</p>
 			)}
-			{/* <Pizza
-				name="Pizza Spinaci"
-				ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-				photoName="pizzas/spinaci.jpg"
-				price={10}
-			/>
-			<Pizza
-				name="Pizza Funghi"
-				ingredients="Tomato, mozarella, mushrooms, and onion"
-				photoName="pizzas/funghi.jpg"
-				price={12}
-			/> */}
 		</main>
 	);
 }
 
-function Pizza(props) {
-	// console.log(props);
+// Destructuring props
+function Pizza({ pizzaObj }) {
 	return (
-		<li className="pizza">
-			<img src={props.pizzaObj.photoName} alt="Pizza Spinaci"></img>
+		<li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+			<img src={pizzaObj.photoName} alt="Pizza Spinaci"></img>
 			<div>
-				<h3>{props.pizzaObj.name}</h3>
-				<p>{props.pizzaObj.ingredients}</p>
-				<span>{props.pizzaObj.price}</span>
+				<h3>{pizzaObj.name}</h3>
+				<p>{pizzaObj.ingredients}</p>
+				<span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
 			</div>
 		</li>
 	);
@@ -125,15 +115,7 @@ function Footer() {
 	return (
 		<footer className="footer">
 			{isOpen ? (
-				<div className="order">
-					<p>
-						It's {new Date().toLocaleTimeString()}{" "}
-						{isOpen
-							? "We're currently open"
-							: "We're currently closed"}
-					</p>
-					<button className="btn">Hello</button>
-				</div>
+				<Order closeHour={closeHour} />
 			) : (
 				<p>
 					We're closed now. We're happy to welcome you at {openHour}
@@ -143,6 +125,18 @@ function Footer() {
 		</footer>
 	);
 	// return React.createElement("footer", null, "We're currently open");
+}
+
+function Order({ closeHour }) {
+	return (
+		<div className="order">
+			<p>
+				It's {new Date().toLocaleTimeString()} - We're currently open
+				until {closeHour}:00
+			</p>
+			<button className="btn">Order</button>
+		</div>
+	);
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
