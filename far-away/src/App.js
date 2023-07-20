@@ -1,16 +1,33 @@
 import { useState } from "react";
 
-const initialItems = [
-	{ id: 1, description: "Passports", quantity: 2, packed: false },
-	{ id: 2, description: "Socks", quantity: 12, packed: true },
-];
-
 export default function App() {
+	const [items, setItems] = useState([]);
+
+	function handleAddItems(item) {
+		setItems((items) => [...items, item]);
+	}
+
+	function handleDeleteItem(id) {
+		setItems((items) => items.filter((el) => el.id !== id));
+	}
+
+	function handleToogleItem(id) {
+		setItems((items) =>
+			items.map((item) =>
+				item.id === id ? { ...item, packed: !item.packed } : item
+			)
+		);
+	}
+
 	return (
 		<div className="app">
 			<Logo />
-			<Form />
-			<PackingList />
+			<Form onAddItems={handleAddItems} />
+			<PackingList
+				items={items}
+				onDeleteItem={handleDeleteItem}
+				onToogleItem={handleToogleItem}
+			/>
 			<Stats />
 		</div>
 	);
@@ -20,7 +37,7 @@ function Logo() {
 	return <h1>🏝️ Far away 🧳</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
 	const [description, setDescription] = useState("");
 	const [quantity, setQuantity] = useState(1);
 
@@ -35,7 +52,7 @@ function Form() {
 			packed: false,
 			id: Date.now(),
 		};
-		// initialItems.push(newItem);
+		onAddItems(newItem);
 
 		setDescription("");
 		setQuantity(1);
@@ -65,27 +82,37 @@ function Form() {
 	);
 }
 
-function PackingList() {
+function PackingList({ items, onDeleteItem, onToogleItem }) {
 	return (
 		<div className="list">
 			<ul>
-				{initialItems.map((item) => (
-					<Item itemObj={item} key={item.id} />
+				{items.map((item) => (
+					<Item
+						itemObj={item}
+						key={item.id}
+						onDeleteItem={onDeleteItem}
+						onToogleItem={onToogleItem}
+					/>
 				))}
 			</ul>
 		</div>
 	);
 }
 
-function Item({ itemObj }) {
+function Item({ itemObj, onDeleteItem, onToogleItem }) {
 	return (
 		<li>
+			<input
+				type="checkbox"
+				value={itemObj.packed}
+				onChange={() => onToogleItem(itemObj.id)}
+			/>
 			<span
 				style={itemObj.packed ? { textDecoration: "line-through" } : {}}
 			>
 				{itemObj.quantity} {itemObj.description}
 			</span>
-			<button>❌</button>
+			<button onClick={() => onDeleteItem(itemObj.id)}>❌</button>
 		</li>
 	);
 }
