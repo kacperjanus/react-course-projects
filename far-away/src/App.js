@@ -28,7 +28,7 @@ export default function App() {
 				onDeleteItem={handleDeleteItem}
 				onToogleItem={handleToogleItem}
 			/>
-			<Stats />
+			<Stats items={items} />
 		</div>
 	);
 }
@@ -83,10 +83,24 @@ function Form({ onAddItems }) {
 }
 
 function PackingList({ items, onDeleteItem, onToogleItem }) {
+	const [sort, setSort] = useState("input");
+
+	let sortedItems;
+
+	if (sort === "input") sortedItems = items;
+	if (sort === "description")
+		sortedItems = items
+			.slice()
+			.sort((a, b) => a.description.localeCompare(b.description));
+	if (sort === "packed")
+		sortedItems = items
+			.slice()
+			.sort((a, b) => Number(a.packed) - Number(b.packed));
+
 	return (
 		<div className="list">
 			<ul>
-				{items.map((item) => (
+				{sortedItems.map((item) => (
 					<Item
 						itemObj={item}
 						key={item.id}
@@ -95,6 +109,14 @@ function PackingList({ items, onDeleteItem, onToogleItem }) {
 					/>
 				))}
 			</ul>
+
+			<div className="actions">
+				<select value={sort} onChange={(e) => setSort(e.target.value)}>
+					<option value="input">Sort by input order</option>
+					<option value="description">Sort by description</option>
+					<option value="packed">Sort by packed status</option>
+				</select>
+			</div>
 		</div>
 	);
 }
@@ -117,10 +139,24 @@ function Item({ itemObj, onDeleteItem, onToogleItem }) {
 	);
 }
 
-function Stats() {
+function Stats({ items }) {
+	if (items.length === 0)
+		return <p className="stats">Start adding items to your list</p>;
+
+	const noItems = items.length;
+	const packedItems = items.filter((el) => el.packed).length;
+	const percentage = (packedItems / noItems) * 100;
+
 	return (
 		<footer className="stats">
-			<em>You have X items on your list and you already packed X 💼</em>
+			{percentage === 100 ? (
+				<em>Everything packed - you are all set ✅</em>
+			) : (
+				<em>
+					You have {noItems} items on your list and you already packed{" "}
+					{packedItems} ({percentage}%) 💼
+				</em>
+			)}
 		</footer>
 	);
 }
