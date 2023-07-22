@@ -1,2 +1,8 @@
-.DS_Store
 pizza-menu/node_modules
+far-away/node_modules
+eat-n-split/node_modules
+.DS_Store
+eat-n-split/.gitignore
+pizza-menu/.DS_Store
+pizza-menu/public/.DS_Store
+use-popcorn/node_modules/
