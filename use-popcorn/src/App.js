@@ -45,14 +45,32 @@ const tempWatchedData = [
 const average = (arr) =>
 	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function Navbar({ movies }) {
+export default function App() {
+	const [movies, setMovies] = useState(tempMovieData);
+	const [watched, setWatched] = useState(tempWatchedData);
+
 	return (
-		<nav className="nav-bar">
-			<Logo />
-			<Search />
-			<Numresults movies={movies} />
-		</nav>
+		<>
+			<Navbar>
+				<Logo />
+				<Search />
+				<Numresults movies={movies} />
+			</Navbar>
+			<Main>
+				<ListBox>
+					<MovieList movies={movies} />
+				</ListBox>
+				<WatchedBox>
+					<WatchedSummary watched={watched} />
+					<WatchedMovieList watched={watched} />
+				</WatchedBox>
+			</Main>
+		</>
 	);
+}
+
+function Navbar({ children }) {
+	return <nav className="nav-bar">{children}</nav>;
 }
 
 function Logo() {
@@ -85,16 +103,11 @@ function Search() {
 	);
 }
 
-function Main({ movies, watched }) {
-	return (
-		<main className="main">
-			<ListBox movies={movies} />
-			<WatchedBox watched={watched} />
-		</main>
-	);
+function Main({ children }) {
+	return <main className="main">{children}</main>;
 }
 
-function WatchedBox({ watched }) {
+function WatchedBox({ children }) {
 	const [isOpen2, setIsOpen2] = useState(true);
 	return (
 		<div className="box">
@@ -104,12 +117,7 @@ function WatchedBox({ watched }) {
 			>
 				{isOpen2 ? "–" : "+"}
 			</button>
-			{isOpen2 && (
-				<>
-					<WatchedSummary watched={watched} />
-					<WatchedMovieList watched={watched} />
-				</>
-			)}
+			{isOpen2 && children}
 		</div>
 	);
 }
@@ -176,7 +184,7 @@ function WatchedSummary({ watched }) {
 	);
 }
 
-function ListBox({ movies }) {
+function ListBox({ children }) {
 	const [isOpen1, setIsOpen1] = useState(true);
 	return (
 		<div className="box">
@@ -186,7 +194,7 @@ function ListBox({ movies }) {
 			>
 				{isOpen1 ? "–" : "+"}
 			</button>
-			{isOpen1 && <MovieList movies={movies} />}
+			{isOpen1 && children}
 		</div>
 	);
 }
@@ -213,17 +221,5 @@ function Movie({ movie }) {
 				</p>
 			</div>
 		</li>
-	);
-}
-
-export default function App() {
-	const [movies, setMovies] = useState(tempMovieData);
-	const [watched, setWatched] = useState(tempWatchedData);
-
-	return (
-		<>
-			<Navbar movies={movies} />
-			<Main movies={movies} watched={watched} />
-		</>
 	);
 }
