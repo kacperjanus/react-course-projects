@@ -27,6 +27,7 @@ export default function App() {
 	const [showForm, setShowForm] = useState(false);
 	const [expenseMember, setExpenseMember] = useState(null);
 
+	//Called when a form for adding friends is submitted
 	function handleAddFriend(friendName, imageUrl) {
 		setFriends([
 			...friends,
@@ -40,10 +41,12 @@ export default function App() {
 		handleShowAddFriendForm();
 	}
 
+	//Called when button responsible for showing Add Friend form is clicked
 	function handleShowAddFriendForm() {
 		setShowForm((s) => !s);
 	}
 
+	//Called when selecting a friend on a Friend List
 	function handleAddExpenseMember(id) {
 		if (id === expenseMember?.id) setExpenseMember(null);
 		else {
@@ -53,6 +56,7 @@ export default function App() {
 		setShowForm(false);
 	}
 
+	//Called when split bill form is submitted
 	function splitBill(value) {
 		setFriends((friends) =>
 			friends.map((el) =>
@@ -189,10 +193,6 @@ function FormSplitBill({ expenseMember, splitBill }) {
 		if (!bill || !myExpense) return;
 		const value = whoPays === "user" ? paidByFriend : -myExpense;
 		splitBill(value);
-		console.log("Hello");
-		setBill("");
-		setWhoPays("user");
-		setMyExpense("");
 	}
 
 	return (
