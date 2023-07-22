@@ -53,6 +53,17 @@ export default function App() {
 		setShowForm(false);
 	}
 
+	function splitBill(value) {
+		setFriends((friends) =>
+			friends.map((el) =>
+				el.id === expenseMember?.id
+					? { ...el, balance: el.balance + value }
+					: el
+			)
+		);
+		setExpenseMember(null);
+	}
+
 	return (
 		<div className="app">
 			<div className="sidebar">
@@ -71,7 +82,10 @@ export default function App() {
 				)}
 			</div>
 			{expenseMember && (
-				<FormSplitBill expenseMember={expenseMember}></FormSplitBill>
+				<FormSplitBill
+					expenseMember={expenseMember}
+					splitBill={splitBill}
+				></FormSplitBill>
 			)}
 		</div>
 	);
@@ -163,14 +177,26 @@ function FormAddFriend({ onAddFriend }) {
 	);
 }
 
-function FormSplitBill({ expenseMember }) {
+function FormSplitBill({ expenseMember, splitBill }) {
 	const [bill, setBill] = useState("");
 	const [myExpense, setMyExpense] = useState("");
 	const paidByFriend = bill ? bill - myExpense : "";
 	const [whoPays, setWhoPays] = useState("user");
 
+	function onSumbit(e) {
+		e.preventDefault();
+
+		if (!bill || !myExpense) return;
+		const value = whoPays === "user" ? paidByFriend : -myExpense;
+		splitBill(value);
+		console.log("Hello");
+		setBill("");
+		setWhoPays("user");
+		setMyExpense("");
+	}
+
 	return (
-		<form className="form-split-bill">
+		<form className="form-split-bill" onSubmit={onSumbit}>
 			<h2>Split bill with {expenseMember.name}</h2>
 			<label>💰Bill value</label>
 			<input
