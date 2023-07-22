@@ -25,13 +25,17 @@ const initialFriends = [
 export default function App() {
 	const [friends, setFriends] = useState(initialFriends);
 	const [showForm, setShowForm] = useState(false);
-	const [expenseMembers, setExpenseMembers] = useState([]);
+	const [expenseMember, setExpenseMember] = useState(null);
 
 	function handleAddFriend(friendName, imageUrl) {
-		// e.preventDefault();
 		setFriends([
 			...friends,
-			{ id: Date.now(), name: friendName, image: imageUrl, balance: 0 },
+			{
+				id: Date.now(),
+				name: friendName,
+				image: `${imageUrl}?=${Date.now()}`,
+				balance: 0,
+			},
 		]);
 		handleShowAddFriendForm();
 	}
@@ -41,14 +45,12 @@ export default function App() {
 	}
 
 	function handleAddExpenseMember(id) {
-		const newMember = friends.find((friend) => friend.id === id);
-		setExpenseMembers([...expenseMembers, newMember]);
-	}
-
-	function handleRemoveExpenseMember(id) {
-		setExpenseMembers((members) =>
-			members.filter((member) => member.id !== id)
-		);
+		if (id === expenseMember?.id) setExpenseMember(null);
+		else {
+			const newMember = friends.find((friend) => friend.id === id);
+			setExpenseMember(newMember);
+		}
+		setShowForm(false);
 	}
 
 	return (
@@ -57,7 +59,7 @@ export default function App() {
 				<FriendsList
 					friends={friends}
 					onAddExpenseMember={handleAddExpenseMember}
-					onRemoveExpenseMember={handleRemoveExpenseMember}
+					expenseMember={expenseMember}
 				/>
 				{showForm && <FormAddFriend onAddFriend={handleAddFriend} />}
 				{showForm ? (
@@ -68,12 +70,14 @@ export default function App() {
 					</Button>
 				)}
 			</div>
-			<FormSplitBill expenseMembers={expenseMembers}></FormSplitBill>
+			{expenseMember && (
+				<FormSplitBill expenseMember={expenseMember}></FormSplitBill>
+			)}
 		</div>
 	);
 }
 
-function FriendsList({ friends, onAddExpenseMember, onRemoveExpenseMember }) {
+function FriendsList({ friends, onAddExpenseMember, expenseMember }) {
 	return (
 		<ul>
 			{friends.map((friend) => (
@@ -81,24 +85,20 @@ function FriendsList({ friends, onAddExpenseMember, onRemoveExpenseMember }) {
 					friend={friend}
 					key={friend.id}
 					onAddExpenseMember={onAddExpenseMember}
-					onRemoveExpenseMember={onRemoveExpenseMember}
+					expenseMember={expenseMember}
 				/>
 			))}
 		</ul>
 	);
 }
 
-function Friend({ friend, onAddExpenseMember, onRemoveExpenseMember }) {
-	const [selected, setSelected] = useState(false);
-
+function Friend({ friend, onAddExpenseMember, expenseMember }) {
 	function handleClick(id) {
-		selected && onRemoveExpenseMember(id);
-		!selected && onAddExpenseMember(id);
-		setSelected((s) => !s);
+		onAddExpenseMember(id);
 	}
 
 	return (
-		<li>
+		<li className={friend.id === expenseMember?.id ? "selected" : ""}>
 			<img src={friend.image} alt={friend.name}></img>
 			<h3>{friend.name}</h3>
 			{friend.balance < 0 && (
@@ -114,12 +114,9 @@ function Friend({ friend, onAddExpenseMember, onRemoveExpenseMember }) {
 			{friend.balance === 0 && (
 				<p>You are all squared with {friend.name}</p>
 			)}
-			{!selected && (
-				<Button onClick={() => handleClick(friend.id)}>Select</Button>
-			)}
-			{selected && (
-				<Button onClick={() => handleClick(friend.id)}>Deselect</Button>
-			)}
+			<Button onClick={() => handleClick(friend.id)}>
+				{expenseMember?.id !== friend.id ? "Select" : "Deselect"}
+			</Button>
 		</li>
 	);
 }
@@ -134,10 +131,12 @@ function Button({ children, onClick }) {
 
 function FormAddFriend({ onAddFriend }) {
 	const [friendName, setFriendName] = useState("");
-	const [imageUrl, setImageUrl] = useState("");
+	const [imageUrl, setImageUrl] = useState("https://i.pravatar.cc/48");
 
 	function handleSubmit(e) {
 		e.preventDefault();
+
+		if (!friendName || !imageUrl) return;
 		onAddFriend(friendName, imageUrl);
 		setFriendName("");
 		setImageUrl("");
@@ -164,47 +163,48 @@ function FormAddFriend({ onAddFriend }) {
 	);
 }
 
-function FormSplitBill({ expenseMembers }) {
-	const [bill, setBill] = useState(Number(0));
-	const [myExpense, setMyExpense] = useState(Number(0));
+function FormSplitBill({ expenseMember }) {
+	const [bill, setBill] = useState("");
+	const [myExpense, setMyExpense] = useState("");
+	const paidByFriend = bill ? bill - myExpense : "";
+	const [whoPays, setWhoPays] = useState("user");
 
 	return (
 		<form className="form-split-bill">
-			<h2>
-				Split bill with{" "}
-				{expenseMembers.reduce((acc, el) => el.name + ", " + acc, "")}
-			</h2>
+			<h2>Split bill with {expenseMember.name}</h2>
 			<label>💰Bill value</label>
 			<input
 				type="text"
 				value={bill}
-				onChange={(e) => setBill(e.target.value)}
+				onChange={(e) => setBill(Number(e.target.value))}
 			/>
 
 			<label>🫵🏻Your expense</label>
 			<input
 				type="text"
 				value={myExpense}
-				onChange={(e) => setMyExpense(e.target.value)}
+				onChange={(e) =>
+					setMyExpense(
+						Number(e.target.value) > bill
+							? bill
+							: Number(e.target.value)
+					)
+				}
 			/>
 
-			{expenseMembers.map((member) => (
-				<React.Fragment key={member.id}>
-					<label>🤗{member.name}'s expense</label>
-					<input type="text" disabled />
-				</React.Fragment>
-			))}
-
-			<label>🤗X expense</label>
-			<input type="text" value={bill - myExpense} disabled />
+			<label>🤗{expenseMember.name} expense</label>
+			<input type="text" value={paidByFriend} disabled />
 
 			<label>🤑Who's paying the bill?</label>
-			<select>
+			<select
+				value={whoPays}
+				onChange={(e) => setWhoPays(e.target.value)}
+			>
 				<option value="you">You</option>
-				<option value="friend">X</option>
+				<option value="friend">{expenseMember.name}</option>
 			</select>
 
-			<Button>Add</Button>
+			<Button>Split bill</Button>
 		</form>
 	);
 }
