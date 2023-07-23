@@ -89,6 +89,7 @@ export default function App() {
 				<FormSplitBill
 					expenseMember={expenseMember}
 					splitBill={splitBill}
+					key={expenseMember.id}
 				></FormSplitBill>
 			)}
 		</div>
