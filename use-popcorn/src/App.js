@@ -102,6 +102,8 @@ export default function App() {
 				setError("");
 				return;
 			}
+
+			handleCloseMovie();
 			fetchMovies();
 
 			return function () {
@@ -309,6 +311,22 @@ function MovieDetail({ selectedId, onCloseMovie, onAddWatched, watched }) {
 			};
 		},
 		[title]
+	);
+
+	useEffect(
+		function () {
+			function esc(e) {
+				if (e.code === "Escape") {
+					onCloseMovie();
+				}
+			}
+			document.addEventListener("keydown", esc);
+
+			return function () {
+				document.removeEventListener("keydown", esc);
+			};
+		},
+		[onCloseMovie]
 	);
 
 	return (
