@@ -29,6 +29,7 @@ export default function StarRating({
 	messages = [],
 	defaultRating = 0,
 	onSetRating,
+	blocked = false,
 }) {
 	const [rating, setRating] = useState(defaultRating);
 	const [tempRating, setTempRating] = useState(0);
@@ -57,6 +58,7 @@ export default function StarRating({
 						color={color}
 						size={size}
 						key={i}
+						blocked={blocked}
 					/>
 				))}
 			</div>
@@ -69,20 +71,20 @@ export default function StarRating({
 	);
 }
 
-function Star({ onRate, empty, onHover, onHoverOut, color, size }) {
+function Star({ onRate, empty, onHover, onHoverOut, color, size, blocked }) {
 	const starStyle = {
 		width: `${size}px`,
 		height: `${size}px`,
 		display: "block",
-		cursor: "pointer",
+		cursor: `${!blocked ? "pointer" : ""}`,
 	};
 	return (
 		<span
 			role="button"
 			style={starStyle}
-			onClick={onRate}
-			onMouseEnter={onHover}
-			onMouseLeave={onHoverOut}
+			onClick={!blocked ? onRate : null}
+			onMouseEnter={!blocked ? onHover : null}
+			onMouseLeave={!blocked ? onHoverOut : null}
 		>
 			{empty ? (
 				<svg
