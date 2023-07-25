@@ -8,7 +8,10 @@ const KEY = "d1fd5334";
 
 export default function App() {
 	const [movies, setMovies] = useState([]);
-	const [watched, setWatched] = useState([]);
+	// const [watched, setWatched] = useState([]);
+	const [watched, setWatched] = useState(() =>
+		JSON.parse(localStorage.getItem("watched"))
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [query, setQuery] = useState("");
@@ -32,6 +35,13 @@ export default function App() {
 	function handleDeleteWatched(id) {
 		setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
 	}
+
+	useEffect(
+		function () {
+			localStorage.setItem("watched", JSON.stringify(watched));
+		},
+		[watched]
+	);
 
 	useEffect(
 		function () {
@@ -371,7 +381,7 @@ function WatchedSummary({ watched }) {
 				</p>
 				<p>
 					<span>⏳</span>
-					<span>{avgRuntime} min</span>
+					<span>{avgRuntime.toFixed(2)} min</span>
 				</p>
 			</div>
 		</div>
