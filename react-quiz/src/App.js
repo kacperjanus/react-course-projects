@@ -8,6 +8,8 @@ import Question from "./Question.js";
 import NextButton from "./NextButton.js";
 import ProgressBar from "./ProgressBar.js";
 import FinishScreen from "./FinishScreen.js";
+import Timer from "./Timer.js";
+import Footer from "./Footer.js";
 
 const initialState = {
 	questions: [],
@@ -17,6 +19,7 @@ const initialState = {
 	answer: null,
 	points: 0,
 	highscore: 0,
+	secondsRemaining: null,
 };
 
 function reducer(state, action) {
@@ -26,7 +29,11 @@ function reducer(state, action) {
 		case "dataFailed":
 			return { ...state, status: "error" };
 		case "start":
-			return { ...state, status: "active" };
+			return {
+				...state,
+				status: "active",
+				secondsRemaining: state.questions.length * 30,
+			};
 		case "newAnswer":
 			const question = state.questions.at(state.index);
 
@@ -56,14 +63,30 @@ function reducer(state, action) {
 				status: "ready",
 				highscore: state.highscore,
 			};
+		case "tick":
+			return {
+				...state,
+				secondsRemaining: state.secondsRemaining--,
+				status: state.secondsRemaining === 0 ? "finished" : "active",
+			};
 		default:
 			throw new Error("Action unknown");
 	}
 }
 
 export default function App() {
-	const [{ questions, status, index, answer, points, highscore }, dispatch] =
-		useReducer(reducer, initialState);
+	const [
+		{
+			questions,
+			status,
+			index,
+			answer,
+			points,
+			highscore,
+			secondsRemaining,
+		},
+		dispatch,
+	] = useReducer(reducer, initialState);
 
 	const numQuestions = questions.length;
 	const maxPoints = questions.reduce((acc, q) => q.points + acc, 0);
@@ -106,11 +129,17 @@ export default function App() {
 							dispatch={dispatch}
 							answer={answer}
 						/>
-						<NextButton
-							dispatch={dispatch}
-							answer={answer}
-							index={index}
-						/>
+						<Footer>
+							<NextButton
+								dispatch={dispatch}
+								answer={answer}
+								index={index}
+							/>
+							<Timer
+								dispatch={dispatch}
+								secondsRemaining={secondsRemaining}
+							/>
+						</Footer>
 					</>
 				)}
 				{status === "finished" && (
