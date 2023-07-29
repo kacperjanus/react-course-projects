@@ -6,6 +6,7 @@ import Error from "./Error.js";
 import StartScreen from "./StartScreen.js";
 import Question from "./Question.js";
 import NextButton from "./NextButton.js";
+import ProgressBar from "./ProgressBar.js";
 
 const initialState = {
 	questions: [],
@@ -49,6 +50,7 @@ export default function App() {
 	);
 
 	const numQuestions = questions.length;
+	const maxPoints = questions.reduce((acc, q) => q.points + acc, 0);
 
 	useEffect(function () {
 		fetch("http://localhost:8000/questions")
@@ -76,6 +78,13 @@ export default function App() {
 				)}
 				{status === "active" && (
 					<>
+						<ProgressBar
+							i={index}
+							numQuestions={numQuestions}
+							points={points}
+							maxPoints={maxPoints}
+							answer={answer}
+						/>
 						<Question
 							question={questions[index]}
 							dispatch={dispatch}
