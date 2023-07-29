@@ -8,23 +8,27 @@ function StartScreen({ numQuestions, dispatch }) {
 			<h2>Welcome to the React Quiz</h2>
 			<h3>
 				<input
+					className="question-input"
 					value={selectedNumQuestions}
 					onChange={(e) =>
 						setSelectedNumQuestions(
-							Number(e.target.value) > 15
-								? 15
-								: Number(e.target.value)
+							Number(e.target.value)
+								? Number(e.target.value) > 15
+									? 15
+									: Number(e.target.value)
+								: 0
 						)
 					}
 					size={3}
-				></input>{" "}
+				></input>
 				questions to test your React mastery
 			</h3>
 			<button
 				className=" btn btn-ui"
-				onClick={() =>
-					dispatch({ type: "start", payload: selectedNumQuestions })
-				}
+				onClick={() => {
+					if (!selectedNumQuestions) return;
+					dispatch({ type: "start", payload: selectedNumQuestions });
+				}}
 			>
 				Let's start
 			</button>
