@@ -1,15 +1,15 @@
-function NextButton({ dispatch, answer, index }) {
+function NextButton({ dispatch, answer, index, questions }) {
 	if (answer === null) return null;
 	return (
 		<button
 			className="btn btn-ui"
 			onClick={
-				index === 14
+				index === questions.length - 1
 					? () => dispatch({ type: "finished" })
 					: () => dispatch({ type: "nextQuestion" })
 			}
 		>
-			{index === 14 ? "Finish" : "Next"}
+			{index === questions.length - 1 ? "Finish" : "Next"}
 		</button>
 	);
 }

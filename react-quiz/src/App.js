@@ -22,6 +22,8 @@ const initialState = {
 	secondsRemaining: null,
 };
 
+let fetchedQuestions;
+
 function reducer(state, action) {
 	switch (action.type) {
 		case "dataReceived":
@@ -32,7 +34,11 @@ function reducer(state, action) {
 			return {
 				...state,
 				status: "active",
-				secondsRemaining: state.questions.length * 30,
+				questions:
+					action.payload === 15
+						? state.questions
+						: state.questions.slice(0, action.payload),
+				secondsRemaining: action.payload * 30,
 			};
 		case "newAnswer":
 			const question = state.questions.at(state.index);
@@ -59,7 +65,7 @@ function reducer(state, action) {
 		case "restart":
 			return {
 				...initialState,
-				questions: state.questions,
+				questions: fetchedQuestions,
 				status: "ready",
 				highscore: state.highscore,
 			};
@@ -94,13 +100,12 @@ export default function App() {
 	useEffect(function () {
 		fetch("http://localhost:8000/questions")
 			.then((res) => res.json())
-			.then((data) => dispatch({ type: "dataReceived", payload: data }))
+			.then((data) => {
+				fetchedQuestions = data;
+				dispatch({ type: "dataReceived", payload: data });
+			})
 			.catch((err) => dispatch({ type: "dataFailed" }));
 	}, []);
-
-	function handleStart() {
-		dispatch({ type: "start" });
-	}
 
 	return (
 		<div className="app">
@@ -112,7 +117,7 @@ export default function App() {
 				{status === "ready" && (
 					<StartScreen
 						numQuestions={numQuestions}
-						onStart={handleStart}
+						dispatch={dispatch}
 					/>
 				)}
 				{status === "active" && (
@@ -134,6 +139,7 @@ export default function App() {
 								dispatch={dispatch}
 								answer={answer}
 								index={index}
+								questions={questions}
 							/>
 							<Timer
 								dispatch={dispatch}
