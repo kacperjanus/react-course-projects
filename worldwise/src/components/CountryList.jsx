@@ -13,7 +13,7 @@ function CountryList({ cities, isLoading }) {
 		.map((city) => city.country)
 		.reduce(
 			(acc, country) =>
-				acc.find((val) => val === country)
+				acc.find((val) => val.country === country)
 					? acc
 					: [
 							...acc,
