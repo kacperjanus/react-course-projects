@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { CitiesProvider } from "./contexts/CitiesContext";
 
 import Product from "./pages/Product";
