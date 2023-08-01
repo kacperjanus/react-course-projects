@@ -14,6 +14,7 @@ import City from "./components/City";
 import Form from "./components/Form";
 
 import "./index.css";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
 	return (
@@ -23,7 +24,14 @@ function App() {
 					<Routes>
 						<Route path="product" element={<Product />} />
 						<Route path="pricing" element={<Pricing />} />
-						<Route path="app" element={<AppLayout />}>
+						<Route
+							path="app"
+							element={
+								<ProtectedRoute>
+									<AppLayout />
+								</ProtectedRoute>
+							}
+						>
 							<Route
 								index
 								element={<Navigate replace to="cities" />}
