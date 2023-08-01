@@ -9,6 +9,11 @@ import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useUrlPosition } from "../hooks/useUrlPosition";
+import ReactDatePicker from "react-datepicker";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import { useCities } from "../contexts/CitiesContext";
 
 export function convertToEmoji(countryCode) {
 	const codePoints = countryCode
@@ -28,11 +33,14 @@ function Form() {
 	const [isGeocodingLoading, setIsGeocodingLoading] = useState(false);
 	const [emoji, setEmoji] = useState("");
 	const [geocodingError, setGeocodingError] = useState("");
+	const { createCity, isLoading } = useCities();
+	const navigate = useNavigate();
 
 	const [lng, lat] = useUrlPosition();
 
 	useEffect(
 		function () {
+			if (!lat || !lng) return;
 			async function fetchCityData() {
 				try {
 					setIsGeocodingLoading(true);
@@ -60,12 +68,33 @@ function Form() {
 		[lng, lat]
 	);
 
+	async function handleSumbit(e) {
+		e.preventDefault();
+
+		if (!cityName || !date) return;
+		const newCity = {
+			cityName,
+			country,
+			emoji,
+			date,
+			notes,
+			position: { lat, lng },
+		};
+		await createCity(newCity);
+		navigate("/app/cities");
+	}
+
 	if (isGeocodingLoading) return <Spinner />;
+	if (!lat || !lng)
+		return <Message message={"Start by clicking somewhere on a map"} />;
 
 	return geocodingError ? (
 		<Message message={geocodingError} />
 	) : (
-		<form className={styles.form}>
+		<form
+			className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+			onSubmit={handleSumbit}
+		>
 			<div className={styles.row}>
 				<label htmlFor="cityName">City name</label>
 				<input
@@ -78,10 +107,11 @@ function Form() {
 
 			<div className={styles.row}>
 				<label htmlFor="date">When did you go to {cityName}?</label>
-				<input
+				<DatePicker
 					id="date"
-					onChange={(e) => setDate(e.target.value)}
-					value={date}
+					onChange={(date) => setDate(date)}
+					selected={date}
+					dateFormat={"dd/MM/yyyy"}
 				/>
 			</div>
 

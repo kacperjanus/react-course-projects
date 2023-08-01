@@ -1,40 +1,76 @@
 {
-	"cities": [
-		{
-			"cityName": "Lisbon",
-			"country": "Portugal",
-			"emoji": "🇵🇹",
-			"date": "2027-10-31T15:59:59.138Z",
-			"notes": "My favorite city so far!",
-			"position": {
-				"lat": 38.727881642324164,
-				"lng": -9.140900099907554
-			},
-			"id": 73930385
-		},
-		{
-			"cityName": "Madrid",
-			"country": "Spain",
-			"emoji": "🇪🇸",
-			"date": "2027-07-15T08:22:53.976Z",
-			"notes": "",
-			"position": {
-				"lat": 40.46635901755316,
-				"lng": -3.7133789062500004
-			},
-			"id": 17806751
-		},
-		{
-			"cityName": "Berlin",
-			"country": "Germany",
-			"emoji": "🇩🇪",
-			"date": "2027-02-12T09:24:11.863Z",
-			"notes": "Amazing 😃",
-			"position": {
-				"lat": 52.53586782505711,
-				"lng": 13.376933665713324
-			},
-			"id": 98443197
-		}
-	]
+  "cities": [
+    {
+      "cityName": "Lisbon",
+      "country": "Portugal",
+      "emoji": "🇵🇹",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "My favorite city so far!",
+      "position": {
+        "lat": 38.727881642324164,
+        "lng": -9.140900099907554
+      },
+      "id": 73930385
+    },
+    {
+      "cityName": "Madrid",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2027-07-15T08:22:53.976Z",
+      "notes": "",
+      "position": {
+        "lat": 40.46635901755316,
+        "lng": -3.7133789062500004
+      },
+      "id": 17806751
+    },
+    {
+      "cityName": "Berlin",
+      "country": "Germany",
+      "emoji": "🇩🇪",
+      "date": "2027-02-12T09:24:11.863Z",
+      "notes": "Amazing 😃",
+      "position": {
+        "lat": 52.53586782505711,
+        "lng": 13.376933665713324
+      },
+      "id": 98443197
+    },
+    {
+      "cityName": "Zaragoza",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2023-08-01T18:20:14.307Z",
+      "notes": "I went there on a business trip",
+      "position": {
+        "lat": "41.64007838467894",
+        "lng": "-0.8789062500000001"
+      },
+      "id": 98443198
+    },
+    {
+      "cityName": "Warsaw",
+      "country": "Poland",
+      "emoji": "🇵🇱",
+      "date": "2022-11-30T19:23:34.000Z",
+      "notes": "This is where I lived for a long time",
+      "position": {
+        "lat": "52.247982985281865",
+        "lng": "21.005859375000004"
+      },
+      "id": 98443199
+    },
+    {
+      "cityName": "Celina",
+      "country": "United States of America (the)",
+      "emoji": "🇺🇸",
+      "date": "2023-09-12T18:28:07.000Z",
+      "notes": "I will go there really soon",
+      "position": {
+        "lat": "40.54941768533957",
+        "lng": "-84.57172393798828"
+      },
+      "id": 98443200
+    }
+  ]
 }
