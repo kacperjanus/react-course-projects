@@ -25,8 +25,7 @@ function Map() {
 		getPosition,
 	} = useGeolocation();
 
-	const { lng, lat } = useUrlPosition();
-
+	const [lng, lat] = useUrlPosition();
 	useEffect(
 		function () {
 			if (lat && lng) setMapPosition([lat, lng]);
