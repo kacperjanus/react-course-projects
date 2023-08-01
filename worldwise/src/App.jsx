@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CitiesProvider } from "./contexts/CitiesContext";
+import { AuthProvider } from "./contexts/FakeAuthContext";
 
 import Product from "./pages/Product";
 import Pricing from "./pages/Pricing";
@@ -17,25 +18,27 @@ import "./index.css";
 function App() {
 	return (
 		<CitiesProvider>
-			<BrowserRouter>
-				<Routes>
-					<Route path="product" element={<Product />} />
-					<Route path="pricing" element={<Pricing />} />
-					<Route path="app" element={<AppLayout />}>
-						<Route
-							index
-							element={<Navigate replace to="cities" />}
-						/>
-						<Route path="cities" element={<CityList />} />
-						<Route path="cities/:id" element={<City />} />
-						<Route path="countries" element={<CountryList />} />
-						<Route path="form" element={<Form />} />
-					</Route>
-					<Route path="login" element={<Login />} />
-					<Route path="/" element={<Homepage />} />
-					<Route path="*" element={<PageNotFound />} />
-				</Routes>
-			</BrowserRouter>
+			<AuthProvider>
+				<BrowserRouter>
+					<Routes>
+						<Route path="product" element={<Product />} />
+						<Route path="pricing" element={<Pricing />} />
+						<Route path="app" element={<AppLayout />}>
+							<Route
+								index
+								element={<Navigate replace to="cities" />}
+							/>
+							<Route path="cities" element={<CityList />} />
+							<Route path="cities/:id" element={<City />} />
+							<Route path="countries" element={<CountryList />} />
+							<Route path="form" element={<Form />} />
+						</Route>
+						<Route path="login" element={<Login />} />
+						<Route path="/" element={<Homepage />} />
+						<Route path="*" element={<PageNotFound />} />
+					</Routes>
+				</BrowserRouter>
+			</AuthProvider>
 		</CitiesProvider>
 	);
 }
