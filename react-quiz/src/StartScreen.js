@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useQuiz } from "./QuizContext";
 
-function StartScreen({ numQuestions, dispatch }) {
+function StartScreen() {
+	const { numQuestions, dispatch } = useQuiz();
 	const [selectedNumQuestions, setSelectedNumQuestions] =
 		useState(numQuestions);
 	return (
