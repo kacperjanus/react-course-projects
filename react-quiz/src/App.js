@@ -1,4 +1,3 @@
-import { useEffect, useReducer } from "react";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Loader from "./Loader.js";
