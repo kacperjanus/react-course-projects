@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useEffect } from "react";
 import { useCities } from "../contexts/CitiesContext";
@@ -14,14 +14,6 @@ const formatDate = (date) =>
 	}).format(new Date(date));
 
 function City() {
-	// TEMP DATA
-	const temp = {
-		cityName: "Lisbon",
-		emoji: "🇵🇹",
-		date: "2027-10-31T15:59:59.138Z",
-		notes: "My favorite city so far!",
-	};
-
 	const { getCity, currentCity, isLoading } = useCities();
 	const { cityName, emoji, date, notes } = currentCity;
 	const { id } = useParams();
@@ -32,10 +24,6 @@ function City() {
 		},
 		[id, getCity]
 	);
-
-	const [searchParams, setSearchParams] = useSearchParams();
-	const lat = searchParams.get("lat");
-	const lng = searchParams.get("lng");
 
 	if (isLoading) return <Spinner />;
 	return (

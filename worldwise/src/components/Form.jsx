@@ -9,7 +9,6 @@ import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useUrlPosition } from "../hooks/useUrlPosition";
-import ReactDatePicker from "react-datepicker";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
