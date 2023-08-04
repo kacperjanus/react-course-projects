@@ -1,9 +1,10 @@
-import styles from "./CountryList.module.css";
+import { useCities } from "../contexts/CitiesContext";
 
 import Spinner from "./Spinner.jsx";
 import CountryItem from "./CountryItem.jsx";
 import Message from "./Message.jsx";
-import { useCities } from "../contexts/CitiesContext";
+
+import styles from "./CountryList.module.css";
 
 function CountryList() {
 	const { cities, isLoading } = useCities();
