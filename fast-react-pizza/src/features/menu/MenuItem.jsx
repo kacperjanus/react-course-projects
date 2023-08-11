@@ -1,26 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
-import { addItem, getCart, getPizzaById } from "../cart/cartSlice";
+import { addItem, getPizzaById, increaseItemQuantity } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
+import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 
 function MenuItem({ pizza }) {
     const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
     const dispatch = useDispatch();
 
-    const cart = useSelector(getCart);
     const findPizzaById = useSelector(getPizzaById(id));
 
     function handleAddToCart() {
-        const item = {
-            pizzaId: id,
-            name,
-            quantity: 1,
-            unitPrice,
-            totalPrice: unitPrice * 1,
-        };
-        dispatch(addItem(item));
+        if (findPizzaById) {
+            dispatch(increaseItemQuantity(id));
+        } else {
+            const item = {
+                pizzaId: id,
+                name,
+                quantity: 1,
+                unitPrice,
+                totalPrice: unitPrice * 1,
+            };
+            dispatch(addItem(item));
+        }
     }
 
     return (
@@ -44,12 +48,18 @@ function MenuItem({ pizza }) {
                         </p>
                     )}
                     <div className="space-x-4">
-                        {!soldOut && (
-                            <Button type="small" onClick={handleAddToCart}>
-                                Add to cart
-                            </Button>
+                        {findPizzaById ? (
+                            <div className="sm flex items-center gap-3 sm:gap-8">
+                                <UpdateItemQuantity pizzaId={id} />
+                                <DeleteItem pizzaId={id} />
+                            </div>
+                        ) : (
+                            !soldOut && (
+                                <Button type="small" onClick={handleAddToCart}>
+                                    Add to cart
+                                </Button>
+                            )
                         )}
-                        {findPizzaById ? <DeleteItem pizzaId={id} /> : null}
                     </div>
                 </div>
             </div>
