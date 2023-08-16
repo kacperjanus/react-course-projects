@@ -3,6 +3,7 @@ import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
     display: grid;
@@ -52,9 +53,24 @@ function CabinRow({ cabin }) {
         regularPrice,
         discount,
         image,
+        description,
     } = cabin;
 
     const { isDeleting, deleteCabin } = useDeleteCabin();
+    const { isCreating, createCabin } = useCreateCabin();
+
+    const isWorking = isDeleting || isCreating;
+
+    function handleDuplicate() {
+        createCabin({
+            name: `Copy of ${name}`,
+            maxCapacity,
+            regularPrice,
+            discount,
+            image,
+            description,
+        });
+    }
 
     return (
         <>
@@ -70,13 +86,16 @@ function CabinRow({ cabin }) {
                 )}
                 <div>
                     <button
-                        disabled={isDeleting}
+                        disabled={isWorking}
                         onClick={() => setShowForm((state) => !state)}
                     >
                         Edit
                     </button>
+                    <button disabled={isWorking} onClick={handleDuplicate}>
+                        Duplicate
+                    </button>
                     <button
-                        disabled={isDeleting}
+                        disabled={isWorking}
                         onClick={() => deleteCabin(cabinId)}
                     >
                         Delete
