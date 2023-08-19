@@ -11,7 +11,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ cabin = {} }) {
+function CreateCabinForm({ cabin = {}, onCloseModal }) {
     const { id: editId, ...editValues } = cabin;
     const isEditSession = Boolean(editId);
     const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -33,13 +33,19 @@ function CreateCabinForm({ cabin = {} }) {
             ? editCabin(
                   { newCabinData: { ...data, image }, editId },
                   {
-                      onSuccess: () => reset(),
+                      onSuccess: () => {
+                          reset();
+                          onCloseModal?.();
+                      },
                   }
               )
             : createCabin(
                   { ...data, image },
                   {
-                      onSuccess: () => reset(),
+                      onSuccess: () => {
+                          reset();
+                          onCloseModal?.();
+                      },
                   }
               );
     }
@@ -49,7 +55,10 @@ function CreateCabinForm({ cabin = {} }) {
     }
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form
+            onSubmit={handleSubmit(onSubmit, onError)}
+            type={onCloseModal ? "modal" : "regular"}
+        >
             <FormRow label="Cabin name" error={errors?.name?.message}>
                 <Input
                     disabled={isWorking}
@@ -137,7 +146,11 @@ function CreateCabinForm({ cabin = {} }) {
 
             <FormRow>
                 {/* type is an HTML attribute! */}
-                <Button variation="secondary" type="reset">
+                <Button
+                    variation="secondary"
+                    type="reset"
+                    onClick={() => onCloseModal?.()}
+                >
                     Cancel
                 </Button>
                 <Button disabled={isWorking}>
