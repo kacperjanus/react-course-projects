@@ -85,7 +85,6 @@ function Window({ children, name }) {
     const ref = useRef();
 
     function handleClickOutsideModal(e) {
-        e.preventPropagation();
         if (ref.current && !ref.current.contains(e.target)) close();
     }
 
