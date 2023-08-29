@@ -11,12 +11,11 @@ import { useUpdatedUser } from "./useUpdatedUser";
 
 function UpdateUserDataForm() {
     // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
-    const {
-        user: {
-            email,
-            user_metadata: { fullName: currentFullName },
-        },
-    } = useUser();
+    const { user } = useUser();
+
+    const { email, user_metadata } = user;
+
+    const { fullName: currentFullName } = user_metadata;
 
     const { updateUser, isUpdatingUser } = useUpdatedUser();
 
@@ -67,8 +66,8 @@ function UpdateUserDataForm() {
             <FormRow>
                 <Button
                     disabled={isUpdatingUser}
-                    type="reset"
-                    variation="secondary"
+                    $type="reset"
+                    $variation="secondary"
                     onClick={handleCancel}
                 >
                     Cancel

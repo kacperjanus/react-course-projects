@@ -11,5 +11,7 @@ export function useUser() {
         queryFn: getCurrentUser,
     });
 
+    if (error) throw new Error(error.message);
+
     return { isLoading, user, isAuthenticated: user?.role === "authenticated" };
 }
