@@ -30,7 +30,6 @@ function App() {
         <DarkModeProvider>
             <QueryClientProvider client={queryClient}>
                 <ReactQueryDevtools initialIsOpen={false} />
-                <GlobalStyles />
                 <BrowserRouter>
                     <Routes>
                         <Route
