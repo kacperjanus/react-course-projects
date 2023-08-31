@@ -8,7 +8,6 @@ import Account from "./pages/Account";
 import Login from "./pages/Login";
 import Users from "./pages/Users";
 import PageNotFound from "./pages/PageNotFound";
-import GlobalStyles from "./styles/GlobalStyles";
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
