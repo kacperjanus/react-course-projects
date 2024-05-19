@@ -39,7 +39,7 @@ export async function getCabinPrice(id) {
 export const getCabins = async function () {
     const {data, error} = await supabase
         .from('cabins')
-        .select('id, name, maxCapacity, regularPrice, discount, image')
+        .select('id, name, maxCapacity, regularPrice, discount, image, description')
         .order('name');
 
     if (error) {
@@ -127,7 +127,7 @@ export async function getBookedDatesByCabinId(cabinId) {
 
 export async function getSettings() {
     const {data, error} = await supabase.from('settings').select('*').single();
-
+    
     if (error) {
         console.error(error);
         throw new Error('Settings could not be loaded');
