@@ -4,7 +4,8 @@ export interface Cabin {
     maxCapacity: number;
     regularPrice: number;
     discount: number;
-    image: string
+    image: string,
+    description: string,
 }
 
 export interface Booking {
@@ -19,4 +20,13 @@ export interface Booking {
     created_at: string;
     // cabins: { name, image },
     cabins: { name: string, image: string };
+}
+
+export interface Settings {
+    id: number,
+    createdAt: string,
+    minBookingLength: number,
+    maxBookingLength: number,
+    maxGuestPerBooking: number,
+    breakfastPrice: number,
 }
