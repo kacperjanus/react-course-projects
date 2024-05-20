@@ -9,6 +9,7 @@ const josefin = Josefin_Sans({
 
 import "@/app/_styles/globals.css"
 import Header from "@/app/_components/Header";
+import {ReservationProvider} from "@/app/_components/ReservationContext";
 
 export const metadata = {
     title: {
@@ -23,11 +24,13 @@ export default function RootLayoutLayout({children}: { children: ReactNode }) {
     return <html>
     <body className={`bg-primary-950 text-primary-100 min-h-screen ${josefin.className} flex flex-col relative`}>
     <Header/>
-    <div className="flex-1 px-8 py-12 grid">
-        <main className="max-w-7xl mx-auto w-full">
-            {children}
-        </main>
-    </div>
+    <ReservationProvider>
+        <div className="flex-1 px-8 py-12 grid">
+            <main className="max-w-7xl mx-auto w-full">
+                {children}
+            </main>
+        </div>
+    </ReservationProvider>
     </body>
     </html>
 }
