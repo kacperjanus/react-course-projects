@@ -1,15 +1,17 @@
 import UpdateProfileForm from "@/app/_components/UpdateProfileForm";
 import SelectCountry from "@/app/_components/SelectCountry";
 import React from "react";
+import {getGuest} from "@/app/_lib/data-service";
+import {auth} from "@/app/_lib/auth";
+import {Guest} from "@/app/Interfaces";
 
 export const metadata = {
     title: "Update profile",
 }
 
-export default function Page() {
-    // CHANGE
-    const countryFlag = "pt.jpg";
-    const nationality = "portugal";
+export default async function Page() {
+    const session: Session | null = await auth()
+    const guest: Guest = await getGuest(session.user.email)
 
     return (
         <div>
@@ -22,12 +24,12 @@ export default function Page() {
                 faster and smoother. See you soon!
             </p>
 
-            <UpdateProfileForm countryFlag={countryFlag}>
+            <UpdateProfileForm guest={guest}>
                 <SelectCountry
                     name="nationality"
                     id="nationality"
                     className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-                    defaultCountry={nationality}
+                    defaultCountry={guest.nationality}
                 />
             </UpdateProfileForm>
         </div>
