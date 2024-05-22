@@ -82,7 +82,7 @@ export async function getBookings(guestId) {
         .from('bookings')
         // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
         .select(
-            'id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabins(name, image)'
+            'id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabins(name, image), status'
         )
         .eq('guestId', guestId)
         .order('startDate');
@@ -127,7 +127,7 @@ export async function getBookedDatesByCabinId(cabinId) {
 
 export async function getSettings() {
     const {data, error} = await supabase.from('settings').select('*').single();
-    
+
     if (error) {
         console.error(error);
         throw new Error('Settings could not be loaded');
