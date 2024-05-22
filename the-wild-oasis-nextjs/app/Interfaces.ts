@@ -20,6 +20,8 @@ export interface Booking {
     created_at: string;
     // cabins: { name, image },
     cabins: { name: string, image: string };
+    cabinId: number;
+    observations?: string;
 }
 
 export interface Settings {
