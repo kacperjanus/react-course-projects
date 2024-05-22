@@ -4,6 +4,7 @@ import React from "react";
 import {getGuest} from "@/app/_lib/data-service";
 import {auth} from "@/app/_lib/auth";
 import {Guest} from "@/app/Interfaces";
+import {Session} from "next-auth";
 
 export const metadata = {
     title: "Update profile",
@@ -11,6 +12,7 @@ export const metadata = {
 
 export default async function Page() {
     const session: Session | null = await auth()
+    //@ts-ignore
     const guest: Guest = await getGuest(session.user.email)
 
     return (

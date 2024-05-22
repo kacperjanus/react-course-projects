@@ -7,6 +7,7 @@ import Link from "next/link";
 
 interface ReservationCardProps {
     booking: Booking;
+    onDelete: (bookingId: number) => Promise<void>
 }
 
 export const formatDistanceFromNow = (dateStr: string) =>
@@ -14,7 +15,7 @@ export const formatDistanceFromNow = (dateStr: string) =>
         addSuffix: true,
     }).replace('about ', '');
 
-function ReservationCard({booking}: ReservationCardProps) {
+function ReservationCard({booking, onDelete}: ReservationCardProps) {
     const {
         id,
         guestId,
@@ -86,7 +87,7 @@ function ReservationCard({booking}: ReservationCardProps) {
                         className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors'/>
                     <span className='mt-1'>Edit</span>
                 </Link>
-                <DeleteReservation bookingId={id}/>
+                <DeleteReservation onDelete={onDelete} bookingId={id}/>
 
             </div>}
         </div>
