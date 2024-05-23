@@ -12,17 +12,8 @@ export async function generateMetadata({params}: { params: { cabinId: string } }
     return {title: `Cabin ${name}`}
 }
 
-export async function generateStaticParams() {
-    const cabins: Cabin[] = await getCabins()
-    return cabins.map((cabin: Cabin) => {
-        cabinId: String(cabin.id)
-    })
-}
-
 export default async function Page({params}: { params: { cabinId: string } }) {
     const cabin = await getCabin(params.cabinId)
-    // const settings = await getSettings()
-    // const bookedDates = await getBookedDatesByCabinId(params.cabinId)
 
     return (
         <div className="max-w-6xl mx-auto mt-8">
