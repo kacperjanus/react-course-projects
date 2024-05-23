@@ -8,8 +8,8 @@ import {useReservation} from "@/app/_components/ReservationContext";
 
 function isAlreadyBooked(range: DateRange, datesArr: Date[]) {
     return (
-        range.from &&
-        range.to &&
+        range?.from &&
+        range?.to &&
         datesArr.some((date) =>
             isWithinInterval(date, {start: range.from!, end: range.to!})
         )
@@ -29,7 +29,7 @@ function DateSelector({cabin, settings, bookedDates}: DateSelectorProps) {
 
     const displayRange: DateRange = isAlreadyBooked(range, bookedDates) ? {from: undefined, to: undefined} : range
 
-    const numNights = differenceInDays(range.to!, range.from!)
+    const numNights = range?.to && range?.from ? differenceInDays(range.to, range.from) : 0
     const cabinPrice = numNights * (regularPrice - discount);
     // SETTINGS
     const {minBookingLength, maxBookingLength} = settings;
